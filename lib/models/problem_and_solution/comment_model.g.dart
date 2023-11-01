@@ -15,7 +15,6 @@ Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
 
 Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'content': instance.content,
-      'created_at': instance.createdAt,
       'creator_id': instance.creatorId,
       'creator_name': instance.creatorName,
     };

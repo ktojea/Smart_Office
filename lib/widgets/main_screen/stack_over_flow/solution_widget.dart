@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_office/models/problem_and_solution/comment_model.dart';
 
 import 'package:smart_office/models/problem_and_solution/solution_model.dart';
+import 'package:smart_office/requests/problems_requests/problems_requests.dart';
 import 'package:smart_office/theme/custom_text_fields/custom_text_field.dart';
+import 'package:smart_office/theme/pinch_zoom_image_widget.dart';
 import 'package:smart_office/theme/theme.dart';
 import 'package:smart_office/widgets/main_screen/stack_over_flow/comments_widget.dart';
 
@@ -22,6 +26,7 @@ class SolutionWidget extends StatefulWidget {
 class _SolutionWidgetState extends State<SolutionWidget> {
   final _textControllerForComment = TextEditingController();
   bool showComments = false;
+  late List<Comment> _listComments = widget.solution.comments;
 
   _showComments() {
     if (showComments) {
@@ -29,6 +34,17 @@ class _SolutionWidgetState extends State<SolutionWidget> {
     } else {
       showComments = true;
     }
+    setState(() {});
+  }
+
+  _sendComment(String content) async {
+    final prefs = await SharedPreferences.getInstance();
+    final creatorId = prefs.getInt('user_id') as int;
+    ProblemsService().sendUserComment(widget.solution.id, creatorId, content);
+    await Future.delayed(const Duration(seconds: 1));
+    _listComments = await ProblemsService().updateComments(widget.solution.id);
+    _textControllerForComment.text = '';
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {});
   }
 
@@ -106,10 +122,7 @@ class _SolutionWidgetState extends State<SolutionWidget> {
             spacing: 10,
             children: [
               ...widget.solution.urlImages
-                  .map((i) => ClipRRect(
-                        borderRadius: BorderRadius.circular(14),
-                        child: Image.network(i),
-                      ))
+                  .map((i) => PinchZoomImage(url: i))
                   .toList(),
             ],
           ),
@@ -133,7 +146,17 @@ class _SolutionWidgetState extends State<SolutionWidget> {
                   width: 10,
                 ),
                 IconButton(
-                    onPressed: () {}, icon: const Icon(Icons.send_rounded)),
+                  onPressed: () {
+                    if (_textControllerForComment.text.isNotEmpty) _sendComment(_textControllerForComment.text);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: _textControllerForComment.text.isNotEmpty
+                          ? const Text('Комментарий отправлен...')
+                          : const Text('Вы не заполнили поле для комментария'),
+                      duration: const Duration(seconds: 1),
+                    ));
+                  },
+                  icon: const Icon(Icons.send_rounded),
+                ),
               ],
             ),
           ),
@@ -162,7 +185,7 @@ class _SolutionWidgetState extends State<SolutionWidget> {
               ),
             ),
           if (showComments) ...[
-            CommentsWidget(listComments: widget.solution.comments),
+            CommentsWidget(listComments: _listComments),
             TextButton.icon(
               icon: const Icon(
                 Icons.arrow_upward_rounded,
@@ -170,6 +193,7 @@ class _SolutionWidgetState extends State<SolutionWidget> {
                 color: AppColors.cyan,
               ),
               onPressed: () {
+                print(_listComments);
                 _showComments();
               },
               label: const Text(

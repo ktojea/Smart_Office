@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smart_office/widgets/auth_screen/auth_screen.dart';
 import 'dart:io';
 
-import 'package:smart_office/widgets/main_screen/main_screen.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Умный офис',
-      home: AuthScreen(),
+      home: const AuthScreen(),
       theme: ThemeData(
         useMaterial3: true,
       ),

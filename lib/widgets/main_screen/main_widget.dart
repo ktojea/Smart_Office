@@ -11,6 +11,7 @@ import 'package:smart_office/requests/profile_requests/profile_requests.dart';
 import 'package:smart_office/theme/theme.dart';
 import 'package:smart_office/widgets/main_screen/news/news_widget.dart';
 import 'package:smart_office/widgets/main_screen/polls/poll_topic_widget.dart';
+import 'package:smart_office/widgets/main_screen/stack_over_flow/add_problem_screen.dart';
 import 'package:smart_office/widgets/main_screen/stack_over_flow/problems.dart';
 import 'package:smart_office/widgets/profile_screen/profile_screen.dart';
 
@@ -43,8 +44,20 @@ class _MainWidgetState extends State<MainWidget> {
     setState(() {});
   }
 
-  _openProfile(int creatorId, BuildContext context) async {
-    final profie = await ProfileService().getProfile(creatorId);
+  // _openProfile(int creatorId, BuildContext context) async {
+  //   final profie = await ProfileService().getProfile(creatorId);
+  //   if (!context.mounted) return;
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => ProfileScreen(profile: profie),
+  //       ));
+  // }
+
+  _openMyProfile(BuildContext context) async {
+    var prefs = await SharedPreferences.getInstance();
+    final myId = prefs.getInt('user_id') as int;
+    final profie = await ProfileService().getProfile(myId);
     if (!context.mounted) return;
     Navigator.push(
         context,
@@ -109,19 +122,31 @@ class _MainWidgetState extends State<MainWidget> {
                             fontWeight: FontWeight.w600,
                             color: Colors.white),
                       ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddProblemScreen(),));
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                      ),
                       const Spacer(),
                       InkWell(
                         borderRadius: BorderRadius.circular(20),
                         onTap: () async {
-                          var prefs = await SharedPreferences.getInstance();
-                          _openProfile(prefs.getInt('user_id')!, context);
+                          _openMyProfile(context);
                         },
                         child: const CircleAvatar(
                           radius: 20,
                           backgroundImage: NetworkImage(
                               'https://apronhub.in/wp-content/uploads/2022/01/team14-scaled.jpg'),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -192,7 +217,7 @@ class _MainWidgetState extends State<MainWidget> {
                         fontSize: 20, fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                       prefixIcon: const Icon(
                         Icons.search_rounded,
                         color: Colors.grey,

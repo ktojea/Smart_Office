@@ -9,6 +9,7 @@ const bgForPollTopicWidget = Svg('assets/svg/bgForPollTopicWidget.svg');
 const bgForFavourites = Svg('assets/svg/bgForFavourites.svg');
 const bgForPomodoro = Svg('assets/svg/bgForPomodoro.svg');
 const bgForSmartOfficeWidget = Svg('assets/svg/bgForSmartOfficeWidget.svg');
+const bgForAddProblemOrSolution = Svg('assets/svg/bgForAddProblemOrSolution.svg');
 const bgForMap = 'assets/svg/bgForMap.svg';
 
 

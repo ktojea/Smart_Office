@@ -39,7 +39,6 @@ class ServicesScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                print(123);
                 final Uri url = Uri.parse('https://www.pomidorko.ru');
                 launchUrl(url);
               },

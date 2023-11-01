@@ -10,16 +10,19 @@ class Comment {
     required this.createdAt,
     required this.creatorId,
     required this.creatorName,
+    this.solutionId,
   });
 
   
   final String content;
-  @JsonKey(name: 'created_at')
+  @JsonKey(name: 'created_at', includeToJson: false)
   final String createdAt;
   @JsonKey(name: 'creator_id')
   final int creatorId;
   @JsonKey(name: 'creator_name')
   final String creatorName;
+  @JsonKey(name: 'problem_id', includeFromJson: false)
+  final int? solutionId;
 
   factory Comment.fromJson(Map<String, dynamic> json) => _$CommentFromJson(json);
 

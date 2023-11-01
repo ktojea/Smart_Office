@@ -4,13 +4,24 @@ import 'package:smart_office/requests/profile_requests/profile_requests.dart';
 import 'package:smart_office/theme/theme.dart';
 import 'package:smart_office/widgets/profile_screen/profile_screen.dart';
 
-class CommentsWidget extends StatelessWidget {
+class CommentsWidget extends StatefulWidget {
   const CommentsWidget({
     super.key,
     required this.listComments,
   });
 
   final List<Comment> listComments;
+
+  
+
+  @override
+  State<CommentsWidget> createState() {
+    return _CommentsWidgetState();
+  }
+
+}
+
+class _CommentsWidgetState extends State<CommentsWidget> {
 
   _openProfile(int creatorId, BuildContext context) async {
     final profie = await ProfileService().getProfile(creatorId);
@@ -26,7 +37,7 @@ class CommentsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       runSpacing: 10,
-      children: listComments
+      children: widget.listComments
           .map((c) => SizedBox(
                 width: double.infinity,
                 child: Wrap(

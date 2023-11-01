@@ -18,8 +18,6 @@ class _UserAnswerWidgetState extends State<UserAnswerWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(20),
       decoration: whiteBoxDecoration,
       child: Column(children: [
         CustomTextField(

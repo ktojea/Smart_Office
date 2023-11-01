@@ -19,7 +19,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
 
-  List<Widget> screens = [
+  List<Widget> screens = const [
     MapWidget(),
     MainWidget(),
     ServicesScreen(),
